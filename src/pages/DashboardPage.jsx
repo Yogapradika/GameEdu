@@ -46,7 +46,7 @@ export default function DashboardPage({
 
       {/* Hero Banner Ceria ala DOLAN / ASALink Arena */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
-        <div className="xl:col-span-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-lg shadow-blue-600/20">
+        <div className="xl:col-span-8 bg-linear-to-r from-blue-600 via-indigo-600 to-violet-600 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-lg shadow-blue-600/20">
           <div className="relative z-10 max-w-lg">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-slate-900 text-xs font-black mb-3">
               🎮 DOLAN • ASALink Arena
@@ -100,7 +100,7 @@ export default function DashboardPage({
 
         {/* Kartu Tips Hari Ini & Sesi Terakhir */}
         <div className="xl:col-span-4 flex flex-col justify-between gap-4">
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/80 rounded-3xl p-5">
+          <div className="bg-linear-to-br from-amber-50 to-orange-50 border border-amber-200/80 rounded-3xl p-5">
             <div className="flex items-center gap-2 text-amber-800 font-black text-xs mb-2">
               <Lightbulb className="w-4 h-4 text-amber-500" />
               <span>Tips hari ini • Campur level Bloom</span>

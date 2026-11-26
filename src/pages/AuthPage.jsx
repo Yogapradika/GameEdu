@@ -147,10 +147,10 @@ export default function AuthPage({ onLoginSuccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-400 via-blue-600 to-indigo-700 flex items-center justify-center p-4 sm:p-6">
+    <div className="min-h-screen bg-linear-to-br from-sky-400 via-blue-600 to-indigo-700 flex items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 border border-white/40">
         {/* Panel Kiri: Identitas Visual Ceria DOLAN & ASALink Arena */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 text-white p-7 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:col-span-5 bg-linear-to-br from-blue-600 via-indigo-600 to-violet-700 text-white p-7 sm:p-10 flex flex-col justify-between relative overflow-hidden">
           <div className="relative z-10">
             <div className="inline-flex items-center gap-3 bg-white/15 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 mb-6">
               <div className="w-9 h-9 rounded-xl bg-amber-400 text-slate-900 font-black text-lg flex items-center justify-center shadow">
@@ -469,7 +469,7 @@ export default function AuthPage({ onLoginSuccess }) {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition cursor-pointer"
+              className="w-full py-3 rounded-2xl bg-linear-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition cursor-pointer"
             >
               <span>
                 {mode === 'login' && 'Masuk ke Dashboard Guru'}

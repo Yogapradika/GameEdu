@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Save, CheckCircle2, HelpCircle } from 'lucide-react';
+import { ArrowLeft, Save, CheckCircle2, HelpCircle, FileText } from 'lucide-react';
 
 export default function AddQuestionPage({ editingQuestion, onBack, onSaveQuestion }) {
   const [form, setForm] = useState({
@@ -15,6 +15,7 @@ export default function AddQuestionPage({ editingQuestion, onBack, onSaveQuestio
     opsiC: editingQuestion?.opsi?.C || '',
     opsiD: editingQuestion?.opsi?.D || '',
     kunci: editingQuestion?.kunci || 'B',
+    kunciEsai: editingQuestion?.kunciEsai || '',
     pembahasan: editingQuestion?.pembahasan || '',
   });
 
@@ -33,9 +34,17 @@ export default function AddQuestionPage({ editingQuestion, onBack, onSaveQuestio
       setError('Teks pertanyaan wajib diisi.');
       return;
     }
-    if (!form.opsiA.trim() || !form.opsiB.trim() || !form.opsiC.trim() || !form.opsiD.trim()) {
-      setError('Keempat pilihan jawaban (A, B, C, dan D) wajib dilengkapi.');
-      return;
+
+    if (form.tipe === 'Pilihan ganda') {
+      if (!form.opsiA.trim() || !form.opsiB.trim() || !form.opsiC.trim() || !form.opsiD.trim()) {
+        setError('Keempat pilihan jawaban (A, B, C, dan D) wajib dilengkapi.');
+        return;
+      }
+    } else if (form.tipe === 'Esai') {
+      if (!form.kunciEsai.trim()) {
+        setError('Kunci jawaban / pedoman penilaian esai wajib diisi.');
+        return;
+      }
     }
 
     const questionPayload = {
@@ -47,15 +56,22 @@ export default function AddQuestionPage({ editingQuestion, onBack, onSaveQuestio
       kesulitan: form.kesulitan,
       durasi: Number(form.durasi) || 30,
       pertanyaan: form.pertanyaan.trim(),
-      opsi: {
-        A: form.opsiA.trim(),
-        B: form.opsiB.trim(),
-        C: form.opsiC.trim(),
-        D: form.opsiD.trim(),
-      },
-      kunci: form.kunci,
+      opsi:
+        form.tipe === 'Pilihan ganda'
+          ? {
+              A: form.opsiA.trim(),
+              B: form.opsiB.trim(),
+              C: form.opsiC.trim(),
+              D: form.opsiD.trim(),
+            }
+          : null,
+      kunci: form.tipe === 'Pilihan ganda' ? form.kunci : null,
+      kunciEsai: form.tipe === 'Esai' ? form.kunciEsai.trim() : null,
       pembahasan:
-        form.pembahasan.trim() || `Jawaban yang tepat adalah opsi ${form.kunci}.`,
+        form.pembahasan.trim() ||
+        (form.tipe === 'Pilihan ganda'
+          ? `Jawaban yang tepat adalah opsi ${form.kunci}.`
+          : form.kunciEsai.trim()),
       reviewed: true,
     };
 
@@ -128,7 +144,7 @@ export default function AddQuestionPage({ editingQuestion, onBack, onSaveQuestio
                 className="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="Pilihan ganda">Pilihan ganda</option>
-                <option value="Cepat tepat">Cepat tepat</option>
+                <option value="Esai">Esai</option>
               </select>
             </div>
 
@@ -168,7 +184,7 @@ export default function AddQuestionPage({ editingQuestion, onBack, onSaveQuestio
               <input
                 type="number"
                 min="10"
-                max="180"
+                max="300"
                 name="durasi"
                 value={form.durasi}
                 onChange={handleChange}
@@ -178,9 +194,11 @@ export default function AddQuestionPage({ editingQuestion, onBack, onSaveQuestio
           </div>
         </div>
 
-        {/* Isi Soal & Opsi Jawaban */}
+        {/* Isi Soal & Jawaban */}
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-5">
-          <h2 className="text-base font-black text-slate-900">2. Isi soal & opsi jawaban</h2>
+          <h2 className="text-base font-black text-slate-900">
+            {form.tipe === 'Pilihan ganda' ? '2. Isi soal & opsi jawaban' : '2. Isi soal & kunci esai'}
+          </h2>
 
           <div>
             <label className="block text-xs font-extrabold text-slate-600 mb-1.5">Teks soal</label>
@@ -189,58 +207,79 @@ export default function AddQuestionPage({ editingQuestion, onBack, onSaveQuestio
               name="pertanyaan"
               value={form.pertanyaan}
               onChange={handleChange}
-              placeholder="Contoh: Jumlah 10 suku pertama deret 2 + 4 + 6 + ... adalah?"
+              placeholder={
+                form.tipe === 'Pilihan ganda'
+                  ? 'Contoh: Jumlah 10 suku pertama deret 2 + 4 + 6 + ... adalah?'
+                  : 'Contoh: Jelaskan langkah menentukan suku ke-n pada barisan aritmetika beserta contohnya!'
+              }
               className="w-full px-4 py-3 text-sm border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          <div>
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-              <label className="text-xs font-extrabold text-slate-600">
-                Opsi jawaban — klik huruf A/B/C/D untuk menetapkan kunci jawaban
-              </label>
-              <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-3 py-1 rounded-xl">
-                ✓ Kunci Jawaban: {form.kunci}
-              </span>
-            </div>
+          {form.tipe === 'Pilihan ganda' ? (
+            <div>
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <label className="text-xs font-extrabold text-slate-600">
+                  Opsi jawaban — klik huruf A/B/C/D untuk menetapkan kunci jawaban
+                </label>
+                <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-3 py-1 rounded-xl">
+                  ✓ Kunci Jawaban: {form.kunci}
+                </span>
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {['A', 'B', 'C', 'D'].map((huruf) => {
-                const isCorrect = form.kunci === huruf;
-                return (
-                  <div
-                    key={huruf}
-                    className={`flex items-center gap-2.5 p-2.5 rounded-2xl border-2 transition ${
-                      isCorrect
-                        ? 'border-emerald-500 bg-emerald-50/70'
-                        : 'border-slate-200 bg-slate-50/50'
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setForm((prev) => ({ ...prev, kunci: huruf }))}
-                      className={`w-10 h-10 rounded-xl font-black text-sm flex items-center justify-center shrink-0 transition cursor-pointer ${
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {['A', 'B', 'C', 'D'].map((huruf) => {
+                  const isCorrect = form.kunci === huruf;
+                  return (
+                    <div
+                      key={huruf}
+                      className={`flex items-center gap-2.5 p-2.5 rounded-2xl border-2 transition ${
                         isCorrect
-                          ? 'bg-emerald-600 text-white shadow'
-                          : 'bg-white border border-slate-300 text-slate-700 hover:border-blue-500'
+                          ? 'border-emerald-500 bg-emerald-50/70'
+                          : 'border-slate-200 bg-slate-50/50'
                       }`}
                     >
-                      {huruf}
-                    </button>
-                    <input
-                      type="text"
-                      name={`opsi${huruf}`}
-                      value={form[`opsi${huruf}`]}
-                      onChange={handleChange}
-                      placeholder={`Isi jawaban ${huruf}...`}
-                      className="w-full bg-transparent text-sm font-medium focus:outline-none"
-                    />
-                    {isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />}
-                  </div>
-                );
-              })}
+                      <button
+                        type="button"
+                        onClick={() => setForm((prev) => ({ ...prev, kunci: huruf }))}
+                        className={`w-10 h-10 rounded-xl font-black text-sm flex items-center justify-center shrink-0 transition cursor-pointer ${
+                          isCorrect
+                            ? 'bg-emerald-600 text-white shadow'
+                            : 'bg-white border border-slate-300 text-slate-700 hover:border-blue-500'
+                        }`}
+                      >
+                        {huruf}
+                      </button>
+                      <input
+                        type="text"
+                        name={`opsi${huruf}`}
+                        value={form[`opsi${huruf}`]}
+                        onChange={handleChange}
+                        placeholder={`Isi jawaban ${huruf}...`}
+                        className="w-full bg-transparent text-sm font-medium focus:outline-none"
+                      />
+                      {isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div>
+              <label className="text-xs font-extrabold text-slate-600 mb-1.5 flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-emerald-600" />
+                <span>Kunci Jawaban / Pedoman Penilaian Esai *</span>
+              </label>
+              <textarea
+                rows="3"
+                name="kunciEsai"
+                value={form.kunciEsai}
+                onChange={handleChange}
+                placeholder="Tuliskan jawaban ideal atau poin-poin penting yang harus dijawab siswa..."
+                className="w-full px-4 py-3 text-sm border border-emerald-200 bg-emerald-50/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+          )}
 
           <div>
             <label className="text-xs font-extrabold text-slate-600 mb-1.5 flex items-center gap-1.5">

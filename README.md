@@ -12,7 +12,7 @@ Dashboard Pendidik Berbasis React SPA untuk Pengelolaan Bank Soal dan Arena Kuis
 
 ---
 
-## Anggota Kelompok.
+## Anggota Kelompok
 
 | No | Nama Lengkap | NIM | Program Studi |
 | :-: | :--- | :--- | :--- |

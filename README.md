@@ -16,7 +16,7 @@ Dashboard Pendidik Berbasis React SPA untuk Pengelolaan Bank Soal dan Arena Kuis
 
 | No | Nama Lengkap | NIM | Program Studi |
 | :-: | :--- | :--- | :--- |
-| 1 | **Yoga Pradika** *(Ketua)* | `2455202079` | S1 Informatika |
+| 1 | **Yoga Pradika**  | `2455202079` | S1 Informatika |
 | 2 | **Rezal Permadi** | `2455202061` | S1 Informatika |
 | 3 | **Muh Achsan Wicaksono** | `2455202049` | S1 Informatika |
 | 4 | **Ahmad Mustofa** | `2455202002` | S1 Informatika |
